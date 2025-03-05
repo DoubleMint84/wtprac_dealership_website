@@ -1,15 +1,15 @@
 -- Удаление таблиц и ENUM-типов
 
-DROP TABLE "Order";
-DROP TABLE TestDriveSchedule;
-DROP TABLE Car;
-DROP TABLE VehicleConfiguration;
-DROP TABLE Model;
-DROP TABLE Brand;
-DROP TABLE Manufacturer;
-DROP TABLE Manager;
-DROP TABLE Client;
+DROP TABLE "order";
+DROP TABLE test_drive_schedule;
+DROP TABLE car;
+DROP TABLE vehicle_configuration;
+DROP TABLE model;
+DROP TABLE brand;
+DROP TABLE manufacturer;
+DROP TABLE manager;
+DROP TABLE client;
 
-DROP TYPE OrderStatus;
-DROP TYPE TestDriveStatus;
-DROP TYPE CarStatus;
+DROP TYPE order_status;
+DROP TYPE test_drive_status;
+DROP TYPE car_status;
