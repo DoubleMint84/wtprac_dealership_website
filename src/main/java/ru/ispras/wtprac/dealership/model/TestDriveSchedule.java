@@ -1,22 +1,18 @@
 package ru.ispras.wtprac.dealership.model;
 
 import lombok.*;
-import ru.ispras.wtprac.dealership.utility.JsonConverter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "test_drive_schedule")
-@NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
-public class TestDriveSchedule {
+public class TestDriveSchedule implements IEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

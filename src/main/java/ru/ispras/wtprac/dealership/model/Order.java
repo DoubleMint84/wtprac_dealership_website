@@ -9,11 +9,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "order")
-@NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
-public class Order {
+public class Order implements IEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

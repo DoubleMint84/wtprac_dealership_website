@@ -1,6 +1,6 @@
 package ru.ispras.wtprac.dealership.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
+
 import lombok.*;
 import ru.ispras.wtprac.dealership.utility.JsonConverter;
 
@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Table(name = "car")
-@NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
