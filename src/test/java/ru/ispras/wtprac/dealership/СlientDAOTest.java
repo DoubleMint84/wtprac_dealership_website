@@ -28,6 +28,10 @@ class СlientDAOTest {
     void testGetAllClients() {
         List<Client> clientList = clientDAO.getAll().stream().toList();
         assertEquals(1, clientList.size());
+
+        clientDAO.deleteAllEntries();
+        clientList = clientDAO.getAll().stream().toList();
+        assertEquals(0, clientList.size());
     }
 
     @BeforeEach

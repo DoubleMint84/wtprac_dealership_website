@@ -7,6 +7,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import ru.ispras.wtprac.dealership.model.IEntity;
 
+import javax.persistence.Table;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.Collection;
@@ -87,10 +88,13 @@ public abstract class CommonDAO<T extends IEntity<Id>, Id> {
     }
 
     public void deleteAllEntries() {
+        String tableName = entityClass.getAnnotation(Table.class).name();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.createSQLQuery("truncate client restart identity cascade;").executeUpdate();
-            session.createSQLQuery("alter sequence client_id_seq restart with 1;").executeUpdate();
+            session.createSQLQuery(String.format("truncate %s restart identity cascade;", tableName))
+                    .executeUpdate();
+            session.createSQLQuery(String.format("alter sequence %s_id_seq restart with 1;", tableName))
+                    .executeUpdate();
             session.getTransaction().commit();
         }
     }
