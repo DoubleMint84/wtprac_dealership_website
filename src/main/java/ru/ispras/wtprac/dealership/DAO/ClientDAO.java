@@ -1,9 +1,9 @@
 package ru.ispras.wtprac.dealership.DAO;
 
+import org.springframework.stereotype.Repository;
 import ru.ispras.wtprac.dealership.model.Client;
 
+@Repository
 public class ClientDAO extends CommonDAO<Client, Long> {
-    public ClientDAO(Class<Client> entityClass) {
-        super(entityClass);
-    }
+    public ClientDAO() { super(Client.class); }
 }

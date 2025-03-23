@@ -85,4 +85,13 @@ public abstract class CommonDAO<T extends IEntity<Id>, Id> {
             session.getTransaction().commit();
         }
     }
+
+    public void deleteAllEntries() {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.createSQLQuery("truncate client restart identity cascade;").executeUpdate();
+            session.createSQLQuery("alter sequence client_id_seq restart with 1;").executeUpdate();
+            session.getTransaction().commit();
+        }
+    }
 }
