@@ -52,7 +52,7 @@ CREATE TABLE model (
     name VARCHAR(255) NOT NULL,
     brand_id INT REFERENCES brand(id) ON DELETE CASCADE,
     year INT,
-    additional_info JSONB
+    additional_info TEXT
 );
 
 -- Таблица конфигураций автомобилей
@@ -71,7 +71,7 @@ CREATE TABLE vehicle_configuration (
     base_price DECIMAL(10,2),
     discount_amount DECIMAL(10,2) DEFAULT 0,
     octane_number INT,
-    additional_info JSONB,
+    additional_info TEXT,
     is_on_sale BOOLEAN DEFAULT TRUE
 );
 
@@ -87,8 +87,8 @@ CREATE TABLE car (
     date_last_TO DATE,
     color VARCHAR(50),
     seat VARCHAR(50),
-    additional_client_characteristics JSONB,
-    additional_car_characteristics JSONB,
+    additional_client_characteristics TEXT,
+    additional_car_characteristics TEXT,
     car_status car_status NOT NULL DEFAULT 'InProcessing'
 );
 

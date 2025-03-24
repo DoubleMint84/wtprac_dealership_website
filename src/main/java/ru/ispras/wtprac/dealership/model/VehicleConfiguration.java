@@ -6,6 +6,7 @@ import ru.ispras.wtprac.dealership.utility.JsonConverter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -64,9 +65,9 @@ public class VehicleConfiguration implements IEntity<Long> {
     @Column(name = "octane_number")
     private Integer octaneNumber;
 
-    @Column(columnDefinition = "jsonb", name = "additional_info")
+    @Column(name = "additional_info")
     @Convert(converter = JsonConverter.class)
-    private String additionalInfo;
+    private Map<String, String> additionalInfo;
 
     @Column(name = "is_on_sale")
     private Boolean isOnSale = true;

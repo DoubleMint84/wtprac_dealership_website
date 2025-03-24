@@ -5,6 +5,7 @@ import lombok.*;
 import ru.ispras.wtprac.dealership.utility.JsonConverter;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -33,7 +34,7 @@ public class Model implements IEntity<Long> {
     @Column(name = "year")
     private Integer year;
 
-    @Column(columnDefinition = "jsonb", name = "additional_info")
+    @Column(name = "additional_info")
     @Convert(converter = JsonConverter.class)
-    private JsonNode additionalInfo;
+    private Map<String, String> additionalInfo;
 }

@@ -7,6 +7,7 @@ import ru.ispras.wtprac.dealership.utility.JsonConverter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -51,13 +52,13 @@ public class Car implements IEntity<Long> {
     @Column(name = "seat", length = 50)
     private String seat;
 
-    @Column(columnDefinition = "jsonb", name = "additional_client_characteristics")
+    @Column(name = "additional_client_characteristics")
     @Convert(converter = JsonConverter.class)
-    private String additionalClientCharacteristics;
+    private Map<String, String> additionalClientCharacteristics;
 
-    @Column(columnDefinition = "jsonb", name = "additional_car_characteristics")
+    @Column(name = "additional_car_characteristics")
     @Convert(converter = JsonConverter.class)
-    private String additionalCarCharacteristics;
+    private Map<String, String> additionalCarCharacteristics;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "car_status", nullable = false)
