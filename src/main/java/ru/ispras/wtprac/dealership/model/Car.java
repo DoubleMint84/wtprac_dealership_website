@@ -2,6 +2,7 @@ package ru.ispras.wtprac.dealership.model;
 
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 import ru.ispras.wtprac.dealership.utility.JsonConverter;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
+@NoArgsConstructor
 public class Car implements IEntity<Long> {
 
     @Id
@@ -24,6 +26,7 @@ public class Car implements IEntity<Long> {
     private Long id;
 
     @Column(name = "name", nullable = false, length = 255)
+    @NonNull
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -32,12 +35,15 @@ public class Car implements IEntity<Long> {
     private VehicleConfiguration vehicleConfiguration;
 
     @Column(name = "date_of_creation", nullable = false)
+    @NonNull
     private LocalDate dateOfCreation;
 
     @Column(name = "VIN", nullable = false, unique = true, length = 50)
+    @NonNull
     private String vin;
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    @NonNull
     private BigDecimal price;
 
     @Column(name = "mileage")
@@ -61,7 +67,9 @@ public class Car implements IEntity<Long> {
     private Map<String, String> additionalCarCharacteristics;
 
     @Enumerated(EnumType.STRING)
+    @Type(type = "ru.ispras.wtprac.dealership.utility.EnumTypePostgreSQL")
     @Column(name = "car_status", nullable = false)
+    @NonNull
     private CarStatus carStatus = CarStatus.InProcessing;
 
 }
