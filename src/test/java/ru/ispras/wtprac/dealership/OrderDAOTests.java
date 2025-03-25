@@ -40,15 +40,20 @@ public class OrderDAOTests {
     void testGetAllOrdersOfClient() {
         List<Order> orders1 = orderDAO.getAllOrdersOfClient(clientDAO.getById(1L)).stream().toList();
         assertEquals(2, orders1.size());
+        assertEquals(1L, orders1.get(0).getId());
+        assertEquals(4L, orders1.get(1).getId());
 
         List<Order> orders2 = orderDAO.getAllOrdersOfClient(clientDAO.getById(2L)).stream().toList();
         assertEquals(1, orders2.size());
+        assertEquals(2L, orders2.get(0).getId());
     }
 
     @Test
     void testGetAllOrdersWithUnannouncedTestDrive() {
         List<Order> orders1 = orderDAO.getAllOrdersWithUnannouncedTestDrive().stream().toList();
         assertEquals(2, orders1.size());
+        assertEquals(1L, orders1.get(0).getId());
+        assertEquals(4L, orders1.get(1).getId());
     }
 
 
@@ -105,12 +110,12 @@ public class OrderDAOTests {
         List <Order> orders = new ArrayList<>();
         orders.add(new Order(1L, LocalDateTime.parse("2024-08-03T10:15:30"), clientDAO.getById(1L),
                 managerDAO.getById(2L), true, null, OrderStatus.InProcessing, carDAO.getById(1L)));
-        orders.add(new Order(1L, LocalDateTime.parse("2025-04-01T10:15:30"), clientDAO.getById(2L),
+        orders.add(new Order(2L, LocalDateTime.parse("2025-04-01T10:15:30"), clientDAO.getById(2L),
                 managerDAO.getById(2L), false, null, OrderStatus.InProcessing, carDAO.getById(2L)));
-        orders.add(new Order(1L, LocalDateTime.parse("2025-04-03T10:15:30"), clientDAO.getById(3L),
+        orders.add(new Order(3L, LocalDateTime.parse("2025-04-03T10:15:30"), clientDAO.getById(3L),
                 managerDAO.getById(2L), true, testDriveScheduleDAO.getById(1L),
                 OrderStatus.InProcessing, carDAO.getById(3L)));
-        orders.add(new Order(1L, LocalDateTime.parse("2025-04-03T10:15:30"), clientDAO.getById(1L),
+        orders.add(new Order(4L, LocalDateTime.parse("2025-04-03T10:15:30"), clientDAO.getById(1L),
                 managerDAO.getById(2L), true, null, OrderStatus.InProcessing, carDAO.getById(4L)));
         orderDAO.saveCollection(orders);
     }

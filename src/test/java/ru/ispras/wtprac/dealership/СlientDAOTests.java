@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestComponent;
 import org.springframework.test.context.TestPropertySource;
 import ru.ispras.wtprac.dealership.DAO.ClientDAO;
 import ru.ispras.wtprac.dealership.model.Client;
@@ -28,6 +29,9 @@ class СlientDAOTests {
     void testGetAllClients() {
         List<Client> clientList = clientDAO.getAll().stream().toList();
         assertEquals(3, clientList.size());
+        assertEquals("Иван Иванов", clientList.get(0).getName());
+        assertEquals("Петр Иванов", clientList.get(1).getName());
+        assertEquals("Николай Ивашин", clientList.get(2).getName());
 
         clientDAO.deleteAllEntries();
         clientList = clientDAO.getAll().stream().toList();
@@ -38,6 +42,18 @@ class СlientDAOTests {
     void testGetClientByName() {
         List<Client> clientList = clientDAO.getAllClientsByName("Иван").stream().toList();
         assertEquals(2, clientList.size());
+        assertEquals("Иван Иванов", clientList.get(0).getName());
+        assertEquals("Петр Иванов", clientList.get(1).getName());
+    }
+
+    @Test
+    void testDeleteById() {
+        clientDAO.deleteById(2L);
+
+        List<Client> clientList = clientDAO.getAll().stream().toList();
+        assertEquals(2, clientList.size());
+        assertEquals(1L, clientList.get(0).getId());
+        assertEquals(3L, clientList.get(1).getId());
     }
 
     @BeforeEach
@@ -49,7 +65,7 @@ class СlientDAOTests {
         clientList.add(new Client(2L, "Петр Иванов", "petr.petrov@example.com",
                 "Санкт-Петербург, Невский пр., 20", "+79165554433", "0987654321",
                 "78 45 987654", "passwordHash2"));
-        clientList.add(new Client(1L, "Николай Ивашин", "nickoliv@gmail.com",
+        clientList.add(new Client(3L, "Николай Ивашин", "nickoliv@gmail.com",
                 "ул. Горбунова, 44", "+79885369096", "45 12 409287",
                 null, "passwordHash3"));
 

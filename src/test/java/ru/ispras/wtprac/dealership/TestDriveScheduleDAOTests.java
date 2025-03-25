@@ -41,6 +41,19 @@ public class TestDriveScheduleDAOTests {
                 .stream().toList();
 
         assertEquals(1, res.size());
+        assertEquals("BMW X5 Black", res.get(0).getName());
+
+        res = testDriveScheduleDAO.getCarsOnTestDriveByDateTime(
+                LocalDateTime.parse("2025-04-05T10:00:30"), true)
+                .stream().toList();
+        assertEquals(2, res.size());
+        assertEquals("Ford Mustang Red", res.get(0).getName());
+        assertEquals("BMW X5 Black", res.get(1).getName());
+
+        res = testDriveScheduleDAO.getCarsOnTestDriveByDateTime(LocalDateTime.parse("2025-04-05T10:00:30"))
+                .stream().toList();
+        assertEquals(1, res.size());
+        assertEquals("BMW X5 Black", res.get(0).getName());
     }
 
     @BeforeEach
