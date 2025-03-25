@@ -57,9 +57,9 @@ public class VehicleConfigurationDAO extends CommonDAO<VehicleConfiguration, Lon
                 hql, params);
 
         processIntegerFilter("doorsCount",
-                filter.getEnginePowerExact(),
-                filter.getEnginePowerMin(),
-                filter.getEnginePowerMax(),
+                filter.getDoorsCountExact(),
+                filter.getDoorsCountMin(),
+                filter.getDoorsCountMax(),
                 hql, params);
 
     }
