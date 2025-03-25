@@ -93,7 +93,8 @@ public abstract class CommonDAO<T extends IEntity<Id>, Id> {
             session.beginTransaction();
             session.createSQLQuery(String.format("truncate %s restart identity cascade;", tableName))
                     .executeUpdate();
-            session.createSQLQuery(String.format("alter sequence %s_id_seq restart with 1;", tableName))
+            session.createSQLQuery(String.format("alter sequence %s_id_seq restart with 1;",
+                            tableName.replaceAll("^\"|\"$", "")))
                     .executeUpdate();
             session.getTransaction().commit();
         }
