@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource(locations = "classpath:application.properties")
-class СlientDAOTest {
+class СlientDAOTests {
 
     @Autowired
     private ClientDAO clientDAO;
@@ -27,11 +27,17 @@ class СlientDAOTest {
     @Test
     void testGetAllClients() {
         List<Client> clientList = clientDAO.getAll().stream().toList();
-        assertEquals(1, clientList.size());
+        assertEquals(3, clientList.size());
 
         clientDAO.deleteAllEntries();
         clientList = clientDAO.getAll().stream().toList();
         assertEquals(0, clientList.size());
+    }
+
+    @Test
+    void testGetClientByName() {
+        List<Client> clientList = clientDAO.getAllClientsByName("Иван").stream().toList();
+        assertEquals(2, clientList.size());
     }
 
     @BeforeEach
@@ -40,6 +46,12 @@ class СlientDAOTest {
         clientList.add(new Client(1L, "Иван Иванов", "ivan@gmail.com",
                 "ул. Пушкина, д. Колотушкина", "88005553535", "45 08 434277",
                 null, "passwordHash1"));
+        clientList.add(new Client(2L, "Петр Иванов", "petr.petrov@example.com",
+                "Санкт-Петербург, Невский пр., 20", "+79165554433", "0987654321",
+                "78 45 987654", "passwordHash2"));
+        clientList.add(new Client(1L, "Николай Ивашин", "nickoliv@gmail.com",
+                "ул. Горбунова, 44", "+79885369096", "45 12 409287",
+                null, "passwordHash3"));
 
         clientDAO.saveCollection(clientList);
     }
