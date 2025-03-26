@@ -44,6 +44,21 @@ class СlientDAOTests {
         assertEquals(2, clientList.size());
         assertEquals("Иван Иванов", clientList.get(0).getName());
         assertEquals("Петр Иванов", clientList.get(1).getName());
+
+        clientList = clientDAO.getAllClientsByName("Никита").stream().toList();
+        assertEquals(0, clientList.size());
+    }
+
+    @Test
+    void testSaveOneClient() {
+        Client client = new Client(6L, "Михаил Шуфутинский", "kostry_ryabin@gmail.com",
+                "ул. Сентября, д. 3", "+79999999999", "69 69 666148",
+                "40320141", "passwordHash6");
+        clientDAO.saveOne(client);
+
+        List<Client> clientList = clientDAO.getAllClientsByName("Михаил").stream().toList();
+        assertEquals(1, clientList.size());
+        assertEquals(client.getName(), clientList.get(0).getName());
     }
 
     @Test

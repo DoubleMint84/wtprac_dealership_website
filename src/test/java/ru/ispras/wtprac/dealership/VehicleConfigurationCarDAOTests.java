@@ -153,6 +153,17 @@ public class VehicleConfigurationCarDAOTests {
         ));
     }
 
+    @Test
+    void testGetCarByVin() {
+        CarDAO.Filter filter = new CarDAO.Filter();
+        filter.setVin("KMHDN46D24U136245");
+
+        Collection<Car> result = carDAO.getAllCarsByFilter(filter);
+        assertEquals(1, result.size());
+        assertEquals("KMHDN46D24U136245", result.iterator().next().getVin());
+        assertEquals("Toyota Camry Sport", result.iterator().next().getName());
+    }
+
     @BeforeEach
     void setUp() {
         List<Brand> brandList = new ArrayList<>();

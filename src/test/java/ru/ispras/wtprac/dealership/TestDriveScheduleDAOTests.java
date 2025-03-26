@@ -35,22 +35,29 @@ public class TestDriveScheduleDAOTests {
     private ManagerDAO managerDAO;
 
     @Test
-    void testGetCarsByTime() {
+    void testGetCarsByTime1() {
         List<Car> res = testDriveScheduleDAO.getCarsOnTestDriveByDateTime(
-                LocalDateTime.parse("2025-04-02T10:15:30"))
+                        LocalDateTime.parse("2025-04-02T10:15:30"))
                 .stream().toList();
 
         assertEquals(1, res.size());
         assertEquals("BMW X5 Black", res.get(0).getName());
+    }
 
-        res = testDriveScheduleDAO.getCarsOnTestDriveByDateTime(
-                LocalDateTime.parse("2025-04-05T10:00:30"), true)
+    @Test
+    void testGetCarsByTime2() {
+        List<Car> res = testDriveScheduleDAO.getCarsOnTestDriveByDateTime(
+                        LocalDateTime.parse("2025-04-05T10:00:30"), true)
                 .stream().toList();
         assertEquals(2, res.size());
         assertEquals("Ford Mustang Red", res.get(0).getName());
         assertEquals("BMW X5 Black", res.get(1).getName());
+    }
 
-        res = testDriveScheduleDAO.getCarsOnTestDriveByDateTime(LocalDateTime.parse("2025-04-05T10:00:30"))
+    @Test
+    void testGetCarsByTime3() {
+        List<Car> res = testDriveScheduleDAO.getCarsOnTestDriveByDateTime(
+                        LocalDateTime.parse("2025-04-05T10:00:30"))
                 .stream().toList();
         assertEquals(1, res.size());
         assertEquals("BMW X5 Black", res.get(0).getName());
@@ -82,7 +89,7 @@ public class TestDriveScheduleDAOTests {
                 "ул. Горбунова, 44", "+79885369096", "45 12 409287",
                 null, "passwordHash3"));
         clientDAO.saveCollection(clientList);
-        
+
         List<Manager> managerList = new ArrayList<>();
         managerList.add(new Manager("Алексей Соколов", "alexey.sokolov@example.com",
                 "password1"));
@@ -95,7 +102,7 @@ public class TestDriveScheduleDAOTests {
         managerList.add(new Manager("Ольга Карпова", "olga.karpova@example.com",
                 "password5"));
         managerDAO.saveCollection(managerList);
-        
+
         List<TestDriveSchedule> scheduleList = new ArrayList<>();
         scheduleList.add(new TestDriveSchedule(carDAO.getById(3L), LocalDateTime.parse("2025-04-03T10:15:30"),
                 LocalDateTime.parse("2025-04-07T10:15:30"), managerDAO.getById(2L), clientDAO.getById(3L)));

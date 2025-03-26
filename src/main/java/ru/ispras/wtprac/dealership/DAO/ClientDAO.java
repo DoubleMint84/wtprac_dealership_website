@@ -15,8 +15,8 @@ public class ClientDAO extends CommonDAO<Client, Long> {
         Collection<Client> result;
         try (Session session = sessionFactory.openSession()) {
             result = session.createQuery("from Client where name like :name", Client.class)
-                    .setParameter("name", '%' + name + '%').list();
+                    .setParameter("name", '%' + name + '%').getResultList();
         }
-        return result == null ? new ArrayList<>() : result;
+        return result;
     }
 }
