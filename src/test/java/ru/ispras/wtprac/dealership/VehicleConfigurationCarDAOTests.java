@@ -79,6 +79,11 @@ public class VehicleConfigurationCarDAOTests {
                 && c.getModel().getName().equals("911")
                 && c.getEnginePower() == 250
         ));
+
+        filter = new VehicleConfigurationDAO.Filter();
+        filter.setTransmissions(List.of());
+        result = vehicleConfigurationDAO.getConfigurationsByFilter(filter);
+        assertEquals(5, result.size());
     }
 
     @Test
@@ -151,17 +156,24 @@ public class VehicleConfigurationCarDAOTests {
                         !c.getDateOfCreation().isAfter(LocalDate.parse("2023-04-01")) &&
                         c.getCarStatus() == CarStatus.InProcessing
         ));
+
+        filter = new CarDAO.Filter();
+        filter.setStatuses(List.of());
+        result = carDAO.getAllCarsByFilter(filter);
+        assertEquals(5, result.size());
     }
 
     @Test
     void testGetCarByVin() {
         CarDAO.Filter filter = new CarDAO.Filter();
         filter.setVin("KMHDN46D24U136245");
+        filter.setMileageExact(500);
 
         Collection<Car> result = carDAO.getAllCarsByFilter(filter);
         assertEquals(1, result.size());
         assertEquals("KMHDN46D24U136245", result.iterator().next().getVin());
         assertEquals("Toyota Camry Sport", result.iterator().next().getName());
+        assertEquals(500, result.iterator().next().getMileage());
     }
 
     @BeforeEach
