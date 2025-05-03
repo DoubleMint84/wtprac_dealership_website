@@ -19,4 +19,13 @@ public class ClientDAO extends CommonDAO<Client, Long> {
         }
         return result;
     }
+
+    public Client findByEmail(final String email) {
+        Collection<Client> result;
+        try (Session session = sessionFactory.openSession()) {
+            result = session.createQuery("from Client where email like :email", Client.class)
+                    .setParameter("email", '%' + email + '%').getResultList();
+        }
+        return result.isEmpty() ? null : result.iterator().next();
+    }
 }
