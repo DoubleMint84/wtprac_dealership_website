@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Converter
-public class JsonConverter implements AttributeConverter<Map<String, String>, String> {
+public class JsonConverter implements AttributeConverter<Map<String, Object>, String> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(Map<String, String> attribute) {
+    public String convertToDatabaseColumn(Map<String, Object> attribute) {
         String value;
         try {
             value = objectMapper.writeValueAsString(attribute);
@@ -28,9 +28,9 @@ public class JsonConverter implements AttributeConverter<Map<String, String>, St
     }
 
     @Override
-    public Map<String, String> convertToEntityAttribute(String dbData) {
-        Map<String, String> mapValue;
-        TypeReference<HashMap<String, String>> typeRef = new TypeReference<>() {};
+    public Map<String, Object> convertToEntityAttribute(String dbData) {
+        Map<String, Object> mapValue;
+        TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {};
         try {
             mapValue = objectMapper.readValue(dbData, typeRef);
         } catch (Exception e) {
