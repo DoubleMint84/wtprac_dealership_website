@@ -1,10 +1,12 @@
 package ru.ispras.wtprac.dealership.config;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
@@ -32,6 +34,8 @@ public class HibernateDatabaseConfig {
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL10Dialect");
         hibernateProperties.setProperty("connection_pool_size", "1");
+        hibernateProperties.setProperty("hibernate.show_sql", "true");
+        hibernateProperties.setProperty("hibernate.format_sql", "true");
 
         sessionFactory.setHibernateProperties(hibernateProperties);
 
@@ -48,5 +52,12 @@ public class HibernateDatabaseConfig {
         dataSource.setPassword(DB_PASSWORD);
 
         return dataSource;
+    }
+
+    @Bean
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager txManager = new HibernateTransactionManager();
+        txManager.setSessionFactory(sessionFactory);
+        return txManager;
     }
 }
