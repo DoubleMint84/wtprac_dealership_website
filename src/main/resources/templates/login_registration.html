@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход и регистрация</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body class="bg-light">
+<div th:replace="~{generic :: page-header}"></div>
+<div class="container min-vh-100 d-flex align-items-center">
+    <div class="row w-100 justify-content-center">
+        <!-- Форма входа -->
+        <div class="col-md-5 mb-4 mb-md-0">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Вход в систему</h3>
+                    <form th:action="@{/login}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div th:if="${param.error}" class="alert alert-danger">Неверный логин или пароль</div>
+                        <div th:if="${param.logout}" class="alert alert-success">Вы вышли из системы</div>
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Электронная почта</label>
+                            <input type="email" class="form-control" id="loginEmail" name="email" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="loginPassword" class="form-label">Пароль</label>
+                            <input type="password" class="form-control" id="loginPassword" name="passwordHash" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Войти</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Форма регистрации -->
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Регистрация клиента</h3>
+                    <form th:action="@{/register}" th:object="${userForm}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="mb-3">
+                            <label for="regName" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="regName" name="name" th:field="*{name}" required>
+                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regEmail" class="form-label">Электронная почта</label>
+                            <input type="email" class="form-control" id="regEmail" name="email" th:field="*{email}" required>
+                            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regPhone" class="form-label">Номер телефона</label>
+                            <input type="tel" class="form-control" id="regPhone" name="phone" th:field="*{phone}" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="regPassword" class="form-label">Пароль</label>
+                            <input type="password" class="form-control" id="regPassword" name="password"
+                                   minlength="6" th:field="*{passwordHash}" required>
+                            <div th:if="${#fields.hasErrors('passwordHash')}" th:errors="*{passwordHash}" class="text-danger"></div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{generic :: page-bottom}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ispras.wtprac.dealership.DAO.CarDAO;
 import ru.ispras.wtprac.dealership.model.Car;
+import ru.ispras.wtprac.dealership.model.Client;
 
 import java.util.List;
 
@@ -29,9 +30,10 @@ public class HomeController {
         return "catalog";
     }
 
-    @GetMapping("/login")
-    public String loginPage(Model model) {
-        return "login";
+    @GetMapping("/login_registration")
+    public String loginRegistrationPage(Model model) {
+        model.addAttribute("userForm", new Client());
+        return "login_registration";
     }
 
     @GetMapping("/account")
