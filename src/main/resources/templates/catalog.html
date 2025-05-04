@@ -15,8 +15,7 @@
 <div class="catalog-items">
     <div class="item-card" th:each="car : ${cars}">
         <a class="item-text" th:href="'car/' + ${car.getId()}">
-            <!--<div class="card-img" aria-label="Preview of Whizzbang Widget" style="background-image: url({{ url_for('static', filename='/img/item_' + item.id|string + '.png') }})">
-            </div>-->
+            <img class="card-img" th:src="'/images/car/car' + ${car.getId()} + '.png'" th:alt="${car.getName()}"/>
             <div class="card-content">
                 <h3 class="name" th:text="${car.getName()}"></h3>
                 <h3 class="price" th:text="${car.getPrice()}"></h3>
@@ -27,7 +26,7 @@
             </div>
         </a>
         <div class="card-button">
-            <a class="btn-1" href="/product/{{item.id}}/buy_one">В корзину</a>
+            <a class="btn-1" th:href="'/order/car/' + ${car.getId()}">Заказать</a>
         </div>
 
 
