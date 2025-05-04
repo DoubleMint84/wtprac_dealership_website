@@ -99,7 +99,7 @@
                                     <td><span th:text="${order.getOrderDatetime()}"/></td>
                                     <td><span th:text="${order.getCar().getName()}"></span></td>
                                     <td><span th:text="${order.getCar().getPrice()}"></span></td>
-                                    <td><span th:text="${order.getCar().getCarStatus().name()}"></span></td>
+                                    <td><span th:text="${order.getOrderStatus().name()}"></span></td>
                                     <td><span th:text="${order.getNeedsPreTestDrive()}"></span></td>
                                     <td>
                                         <th:block th:if="${!order.getOrderStatus().isCanceled()}">

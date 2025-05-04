@@ -11,9 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.ispras.wtprac.dealership.DAO.CarDAO;
 import ru.ispras.wtprac.dealership.DAO.ClientDAO;
 import ru.ispras.wtprac.dealership.DAO.OrderDAO;
 import ru.ispras.wtprac.dealership.DAO.TestDriveScheduleDAO;
+import ru.ispras.wtprac.dealership.model.CarStatus;
 import ru.ispras.wtprac.dealership.model.Client;
 import ru.ispras.wtprac.dealership.model.OrderStatus;
 import ru.ispras.wtprac.dealership.model.TestDriveStatus;
@@ -33,6 +35,7 @@ public class AuthController {
     private final TestDriveScheduleDAO testDriveScheduleDAO;
 
     private final PasswordEncoder passwordEncoder;
+    private final CarDAO carDAO;
 
     @GetMapping("/register")
     public String showRegistration(Model model) {
@@ -86,6 +89,8 @@ public class AuthController {
             }
             order.setOrderStatus(OrderStatus.Canceled);
             orderDAO.updateOne(order);
+            order.getCar().setCarStatus(CarStatus.CarInDealership);
+            carDAO.updateOne(order.getCar());
             redirectAttributes.addFlashAttribute("success", "Заказ №" + id + " успешно отменен.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка удаления: " + e.getMessage());

@@ -8,5 +8,9 @@ public enum CarStatus {
     CarInDealership,
     InTestDrive,
     Crashed,
-    Sold
+    Sold;
+
+    public boolean isAvailable() {
+        return this == CarInDealership || this == InTestDrive;
+    }
 }
