@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.ispras.wtprac.dealership.service.CustomUserDetailsService;
 
 @Configuration
@@ -36,7 +37,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/index", "/catalog",
+                                "/", "/index", "/catalog", "/images/**", "/logout",
                                 "/login_registration", "/login", "/register", "/style.css", "/js/**"
                         ).permitAll()
                         .anyRequest().authenticated()
@@ -52,8 +53,9 @@ public class SecurityConfig {
                 )
 
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        //.logoutUrl("/logout")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 )
                 .authenticationProvider(authProvider(passwordEncoder()));;

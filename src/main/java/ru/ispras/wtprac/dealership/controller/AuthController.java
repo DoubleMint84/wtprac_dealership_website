@@ -24,10 +24,10 @@ public class AuthController {
         return "login_registration";
     }
 
-    @GetMapping("/logout")
+    /* @GetMapping("/logout")
     public String logout(Model model) {
         return "redirect:/";
-    }
+    }*/
 
     @PostMapping("/register")
     public String processRegistration(

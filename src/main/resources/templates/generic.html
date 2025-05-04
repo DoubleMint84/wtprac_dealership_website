@@ -48,10 +48,10 @@
           </li>
           <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
             <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">Dropdown</a>
+               aria-haspopup="true" aria-expanded="false"><span sec:authentication="name"></span></a>
             <div class="dropdown-menu" aria-labelledby="dropdownId">
-              <a class="dropdown-item" href="account"><span sec:authentication="name"></span></a>
-              <a class="dropdown-item" href="/logout">Action 2</a>
+              <a class="dropdown-item" href="account">Личный кабинет</a>
+              <a class="dropdown-item" href="logout">Выйти</a>
             </div>
           </li>
         </ul>
