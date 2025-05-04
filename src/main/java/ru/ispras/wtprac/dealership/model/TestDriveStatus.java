@@ -5,5 +5,9 @@ public enum TestDriveStatus {
     Running,
     Finished,
     Canceled,
-    FinishedAfterCrash
+    FinishedAfterCrash;
+
+    public boolean isCanceled() {
+        return TestDriveStatus.Canceled.equals(this);
+    }
 }

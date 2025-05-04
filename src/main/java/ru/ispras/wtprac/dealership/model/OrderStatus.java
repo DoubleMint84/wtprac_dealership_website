@@ -6,5 +6,9 @@ public enum OrderStatus {
     CarInDealership,
     InTestDrive,
     Completed,
-    Canceled
+    Canceled;
+
+    public boolean isCanceled() {
+        return OrderStatus.Canceled.equals(this);
+    }
 }
