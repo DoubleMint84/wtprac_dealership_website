@@ -39,12 +39,11 @@ INSERT INTO car (name, config_id, date_of_creation, VIN, price, mileage, date_la
 ('Tesla Model S White', 5, '2023-05-12', '5YJSA1E26MF168239', 110000, 300, '2024-05-12', 'White', 'Vegan Leather', '{"customFeatures": ["Performance Upgrade"]}', '{"serviceHistory": ["Software Update"]}', 'Sold');
 
 -- Вставка данных в таблицу client
-INSERT INTO client (name, email, address, phone_number, passport, driving_license, password_hash) VALUES
-('Иван Иванов', 'ivan.ivanov@example.com', 'Москва, ул. Ленина, 10', '+79031234567', '1234567890', '77 12 345678', 'password1'),
-('Петр Петров', 'petr.petrov@example.com', 'Санкт-Петербург, Невский пр., 20', '+79165554433', '0987654321', '78 45 987654', 'password2'),
-('Сергей Смирнов', 'sergey.smirnov@example.com', 'Екатеринбург, ул. Чапаева, 15', '+79218887766', '1122334455', '66 33 112233', 'password3'),
-('Анна Козлова', 'anna.kozlova@example.com', 'Новосибирск, ул. Мира, 30', '+79335556677', '6677889900', '54 78 667788', 'password4'),
-('Елена Сидорова', 'elena.sidorova@example.com', 'Казань, ул. Пушкина, 25', '+79443332211', '5566778899', '16 91 556677', 'password5');
+INSERT INTO public.client (id, name, email, address, phone_number, passport, driving_license, password_hash) VALUES (1, 'mel', 'mel@mail.com', null, '89990002345', null, null, '$2a$10$DqUUa8G3tFgDLsZoWaEsB.APTyULovsQ7XGErzHIbi4CNWSgYRvXi');
+INSERT INTO public.client (id, name, email, address, phone_number, passport, driving_license, password_hash) VALUES (2, 'nick', 'nick@mail.ru', null, '89990002223', null, null, '$2a$10$misv9UELxQ9xg1WleX60OeZuoy34eYHGWz1afdl37VE0jUjX7CTfK');
+INSERT INTO public.client (id, name, email, address, phone_number, passport, driving_license, password_hash) VALUES (3, 'Noelle', 'noelle@kmail.com', null, '79890023434', null, null, '$2a$10$nfjCteaOuTBA.to665XYPun.KSvjOWEmyibg4BaxkYXTOBboyYsV2');
+INSERT INTO public.client (id, name, email, address, phone_number, passport, driving_license, password_hash) VALUES (4, 'Igor', 'vikhorkov@12atm.net', null, '89005553535', null, null, '$2a$10$cbDg9N8zGZwCH0cN8beUZ.uS8H6WI3s7WobadqgGux37JGcH/QByi');
+INSERT INTO public.client (id, name, email, address, phone_number, passport, driving_license, password_hash) VALUES (5, 'Alex', 'alex@keller.net', null, '80001112233', null, null, '$2a$10$RMgl8EET2qPloGCGgDwN.eZ6A6T08HJc1DBovrf8Li.KHik.rDjhS');
 
 -- Вставка данных в таблицу manager
 INSERT INTO manager (name, email, phone_number, password_hash) VALUES
