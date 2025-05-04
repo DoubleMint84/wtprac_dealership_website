@@ -1,6 +1,7 @@
 package ru.ispras.wtprac.dealership.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,11 +35,6 @@ public class HomeController {
     public String loginRegistrationPage(Model model) {
         model.addAttribute("userForm", new Client());
         return "login_registration";
-    }
-
-    @GetMapping("/account")
-    public String accountPage(Model model) {
-        return "account";
     }
 
 }
