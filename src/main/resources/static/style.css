@@ -150,7 +150,7 @@ main,footer {
 .card-img {
     background-size: cover;
     background-position: center;
-    padding-bottom: 62.5%;
+    padding-bottom: 5%;
 }
 
 .card-button {
