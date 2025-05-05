@@ -10,6 +10,21 @@
   <link rel="stylesheet" th:href="@{/style.css}">
   <title>Список заказов</title>
 </head>
+<script>
+  document.getElementById('filterForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const params = new URLSearchParams();
+
+    for (const [key, value] of formData.entries()) {
+      if (value !== '' && value !== 'null') {
+        params.append(key, value);
+      }
+    }
+
+    window.location.href = this.action + (params.toString() ? '?' + params.toString() : '');
+  });
+</script>
 <body>
 <div th:replace="~{generic :: page-header}"></div>
 <div class="container mt-4">
@@ -25,9 +40,9 @@
       <div class="col-auto">
         <label class="form-label">Needs Test Drive</label>
         <select name="needsTestDrive" class="form-select">
-          <option value="">All</option>
-          <option value="true" th:selected="${param.needsTestDrive == 'true'}">Yes</option>
-          <option value="false" th:selected="${param.needsTestDrive == 'false'}">No</option>
+          <option value="" th:selected="${needsTestDrive == null}">All</option>
+          <option value="true" th:selected="${needsTestDrive}">Yes</option>
+          <option value="false" th:selected="${needsTestDrive == false}">No</option>
         </select>
       </div>
       <div class="col-auto">
@@ -36,7 +51,7 @@
           <option value="">All</option>
           <option th:each="status : ${statuses}"
                   th:value="${status}"
-                  th:selected="${param.orderStatus == status.name()}"
+                  th:selected="${orderStatus != null && orderStatus == status.name()}"
                   th:text="${status.name()}"></option>
         </select>
       </div>

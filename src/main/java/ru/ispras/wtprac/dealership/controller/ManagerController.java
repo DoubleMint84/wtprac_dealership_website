@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.ispras.wtprac.dealership.DAO.CarDAO;
 import ru.ispras.wtprac.dealership.DAO.ClientDAO;
 import ru.ispras.wtprac.dealership.DAO.ManagerDAO;
@@ -18,6 +17,7 @@ import ru.ispras.wtprac.dealership.model.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -34,22 +34,77 @@ public class ManagerController {
 
     @GetMapping("/manager/order_list")
     public String getOrders(
-            @RequestParam(required = false) Long managerId,
-            @RequestParam(required = false) Boolean needsTestDrive,
+            @RequestParam(required = false) String managerId,
+            @RequestParam(required = false) String needsTestDrive,
             @RequestParam(required = false) String orderStatus,
-            @RequestParam(required = false) Long carId,
+            @RequestParam(required = false) String carId,
             Model model) {
+
+        /*model.addAttribute("param", Map.of(
+            "managerId", managerId,
+            "needsTestDrive", needsTestDrive,
+            "orderStatus", orderStatus,
+            "carId", carId
+        ));*/
 
         Collection<Order> orders = orderDAO.getAll();
 
-        if (managerId != null) orders = orders.stream().filter((x) -> Objects.equals(x.getManager().getId(), managerId)).toList();
-        if (needsTestDrive != null) orders = orders.stream().filter((x) -> x.getNeedsPreTestDrive() == needsTestDrive).toList();
-        if (orderStatus != null) orders = orders.stream().filter((x) -> x.getOrderStatus().name().equals(orderStatus)).toList();
-        if (carId != null) orders = orders.stream().filter((x) -> Objects.equals(x.getCar().getId(), carId)).toList();
+        // Обработка managerId
+        Long managerIdLong = null;
+        if (managerId != null && !managerId.isEmpty()) {
+            try {
+                managerIdLong = Long.parseLong(managerId);
+            } catch (NumberFormatException e) {
+                // Обработка неверного формата
+            }
+        }
+
+        // Обработка needsTestDrive
+        Boolean needsTestDriveBool;
+        if (needsTestDrive != null && !needsTestDrive.isEmpty()) {
+            needsTestDriveBool = Boolean.parseBoolean(needsTestDrive);
+        } else {
+            needsTestDriveBool = null;
+        }
+
+        // Обработка carId
+        Long carIdLong = null;
+        if (carId != null && !carId.isEmpty()) {
+            try {
+                carIdLong = Long.parseLong(carId);
+            } catch (NumberFormatException e) {
+                // Обработка неверного формата
+            }
+        }
+
+        // Фильтрация
+        if (managerIdLong != null) {
+            Long finalManagerIdLong = managerIdLong;
+            orders = orders.stream()
+                    .filter(x -> x.getManager() != null && Objects.equals(x.getManager().getId(), finalManagerIdLong))
+                    .collect(Collectors.toList());
+        }
+        if (needsTestDriveBool != null) {
+            orders = orders.stream()
+                    .filter(x -> x.getNeedsPreTestDrive() == needsTestDriveBool)
+                    .collect(Collectors.toList());
+            model.addAttribute("needsTestDrive", needsTestDriveBool);
+        }
+        if (orderStatus != null && !orderStatus.isEmpty()) {
+            orders = orders.stream()
+                    .filter(x -> x.getOrderStatus().name().equals(orderStatus))
+                    .collect(Collectors.toList());
+            model.addAttribute("orderStatus", orderStatus);
+        }
+        if (carIdLong != null) {
+            Long finalCarIdLong = carIdLong;
+            orders = orders.stream()
+                    .filter(x -> Objects.equals(x.getCar().getId(), finalCarIdLong))
+                    .collect(Collectors.toList());
+        }
 
         model.addAttribute("orders", orders);
         model.addAttribute("statuses", OrderStatus.values());
-        model.addAttribute("updatedOrder", new Order());
         return "order_list";
     }
 
