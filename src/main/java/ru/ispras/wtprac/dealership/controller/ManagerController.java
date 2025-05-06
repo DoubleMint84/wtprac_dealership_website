@@ -33,6 +33,7 @@ public class ManagerController {
     private final ManufacturerDAO manufacturerDAO;
     private final TestDriveScheduleDAO testDriveScheduleDAO;
     private final ModelDAO modelDAO;
+    private final VehicleConfigurationDAO vehicleConfigDAO;
 
     @GetMapping("/manager/order_list")
     public String getOrders(
@@ -600,6 +601,88 @@ public class ManagerController {
     public String deleteTestDrive(@PathVariable Long id) {
         testDriveScheduleDAO.deleteById(id);
         return "redirect:/manager/testdrive_list";
+    }
+
+    @GetMapping("/manager/vehicle_config_list")
+    public String getVehicleConfigs(
+            @RequestParam(required = false) Long modelId,
+            @RequestParam(required = false) BigDecimal engineVolume,
+            @RequestParam(required = false) Integer enginePower,
+            @RequestParam(required = false) BigDecimal fuelConsumption,
+            @RequestParam(required = false) Integer doorsCount,
+            @RequestParam(required = false) Integer seatsCount,
+            @RequestParam(required = false) BigDecimal trunkCapacity,
+            @RequestParam(required = false) String transmission,
+            @RequestParam(required = false) Boolean hasCruiseControl,
+            @RequestParam(required = false) BigDecimal basePrice,
+            @RequestParam(required = false) BigDecimal discountAmount,
+            @RequestParam(required = false) Integer octaneNumber,
+            @RequestParam(required = false) Boolean isOnSale,
+            Model model) {
+
+        Collection<VehicleConfiguration> list = vehicleConfigDAO.getAll();
+
+        if (modelId != null)     list = list.stream().filter(vc->vc.getModel().getId().equals(modelId)).collect(Collectors.toList());
+        if (engineVolume != null) list = list.stream().filter(vc->vc.getEngineVolume().equals(engineVolume)).collect(Collectors.toList());
+        if (enginePower != null)  list = list.stream().filter(vc->vc.getEnginePower().equals(enginePower)).collect(Collectors.toList());
+        if (fuelConsumption!= null) list=list.stream().filter(vc->vc.getFuelConsumption().equals(fuelConsumption)).collect(Collectors.toList());
+        if (doorsCount != null)    list = list.stream().filter(vc->vc.getDoorsCount().equals(doorsCount)).collect(Collectors.toList());
+        if (seatsCount != null)    list = list.stream().filter(vc->vc.getSeatsCount().equals(seatsCount)).collect(Collectors.toList());
+        if (trunkCapacity!= null)  list=list.stream().filter(vc->vc.getTrunkCapacity().equals(trunkCapacity)).collect(Collectors.toList());
+        if (transmission != null && !transmission.isEmpty()) list=list.stream().filter(vc->vc.getTransmission().equalsIgnoreCase(transmission)).collect(Collectors.toList());
+        if (hasCruiseControl!= null) list=list.stream().filter(vc->vc.getHasCruiseControl().equals(hasCruiseControl)).collect(Collectors.toList());
+        if (basePrice!= null)      list=list.stream().filter(vc->vc.getBasePrice().compareTo(basePrice)==0).collect(Collectors.toList());
+        if (discountAmount!= null)  list=list.stream().filter(vc->vc.getDiscountAmount().compareTo(discountAmount)==0).collect(Collectors.toList());
+        if (octaneNumber!= null)    list=list.stream().filter(vc->vc.getOctaneNumber().equals(octaneNumber)).collect(Collectors.toList());
+        if (isOnSale!= null)        list=list.stream().filter(vc->vc.getIsOnSale().equals(isOnSale)).collect(Collectors.toList());
+
+        model.addAttribute("vehicleConfigs", list);
+        return "vehicleconfig_list";
+    }
+
+    @PostMapping("/manager/vehicle_configs/{id}/edit")
+    public String updateVehicleConfig(
+            @PathVariable Long id,
+            @RequestParam Long modelId,
+            @RequestParam BigDecimal engineVolume,
+            @RequestParam Integer enginePower,
+            @RequestParam BigDecimal fuelConsumption,
+            @RequestParam Integer doorsCount,
+            @RequestParam Integer seatsCount,
+            @RequestParam BigDecimal trunkCapacity,
+            @RequestParam String transmission,
+            @RequestParam(defaultValue = "false") Boolean hasCruiseControl,
+            @RequestParam BigDecimal basePrice,
+            @RequestParam BigDecimal discountAmount,
+            @RequestParam Integer octaneNumber,
+            @RequestParam(defaultValue = "false") Boolean isOnSale) {
+
+        VehicleConfiguration vc = vehicleConfigDAO.getById(id);
+        if (vc == null) throw new IllegalArgumentException("Invalid VC id: " + id);
+
+        // set fields
+        vc.setModel(modelDAO.getById(modelId));
+        vc.setEngineVolume(engineVolume);
+        vc.setEnginePower(enginePower);
+        vc.setFuelConsumption(fuelConsumption);
+        vc.setDoorsCount(doorsCount);
+        vc.setSeatsCount(seatsCount);
+        vc.setTrunkCapacity(trunkCapacity);
+        vc.setTransmission(transmission);
+        vc.setHasCruiseControl(hasCruiseControl);
+        vc.setBasePrice(basePrice);
+        vc.setDiscountAmount(discountAmount);
+        vc.setOctaneNumber(octaneNumber);
+        vc.setIsOnSale(isOnSale);
+
+        vehicleConfigDAO.updateOne(vc);
+        return "redirect:/manager/vehicle_config_list";
+    }
+
+    @GetMapping("/manager/vehicle_configs/{id}/delete")
+    public String deleteVehicleConfig(@PathVariable Long id) {
+        vehicleConfigDAO.deleteById(id);
+        return "redirect:/manager/vehicle_config_list";
     }
 
 }

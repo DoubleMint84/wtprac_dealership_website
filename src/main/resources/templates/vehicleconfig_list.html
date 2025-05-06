@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Список конфигураций</title>
+</head>
+<script>
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const params = new URLSearchParams();
+
+        for (const [key, value] of formData.entries()) {
+            if (value !== '' && value !== 'null') {
+                params.append(key, value);
+            }
+        }
+
+        window.location.href = this.action + (params.toString() ? '?' + params.toString() : '');
+    });
+</script>
+<body>
+<div th:replace="~{generic :: page-header}"></div>
+<div class="container mt-4">
+    <!-- Форма фильтрации -->
+    <form th:action="@{/manager/vehicle_config_list}" method="get" id="filterForm" class="mb-4">
+        <div class="row g-3">
+            <div class="col">
+                <label class="form-label">Model ID</label>
+                <input type="number" name="modelId" class="form-control" th:value="${param.modelId}">
+            </div>
+            <div class="col">
+                <label class="form-label">Engine Volume</label>
+                <input type="number" step="0.1" name="engineVolume" class="form-control" th:value="${param.engineVolume}">
+            </div>
+            <div class="col">
+                <label class="form-label">Engine Power</label>
+                <input type="number" name="enginePower" class="form-control" th:value="${param.enginePower}">
+            </div>
+            <div class="col">
+                <label class="form-label">Fuel Consumption</label>
+                <input type="number" step="0.1" name="fuelConsumption" class="form-control" th:value="${param.fuelConsumption}">
+            </div>
+            <div class="col">
+                <label class="form-label">Doors Count</label>
+                <input type="number" name="doorsCount" class="form-control" th:value="${param.doorsCount}">
+            </div>
+            <div class="col">
+                <label class="form-label">Seats Count</label>
+                <input type="number" name="seatsCount" class="form-control" th:value="${param.seatsCount}">
+            </div>
+            <div class="col">
+                <label class="form-label">Trunk Capacity</label>
+                <input type="number" name="trunkCapacity" class="form-control" th:value="${param.trunkCapacity}">
+            </div>
+            <div class="col">
+                <label class="form-label">Transmission</label>
+                <input type="text" name="transmission" class="form-control" th:value="${param.transmission}">
+            </div>
+            <div class="col-auto align-self-end">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="hasCruiseControl" th:checked="${param.hasCruiseControl == 'true'}">
+                    <label class="form-check-label">Cruise Control</label>
+                </div>
+            </div>
+            <div class="col">
+                <label class="form-label">Base Price</label>
+                <input type="number" step="0.01" name="basePrice" class="form-control" th:value="${param.basePrice}">
+            </div>
+            <div class="col">
+                <label class="form-label">Discount Amount</label>
+                <input type="number" step="0.01" name="discountAmount" class="form-control" th:value="${param.discountAmount}">
+            </div>
+            <div class="col">
+                <label class="form-label">Octane Number</label>
+                <input type="number" name="octaneNumber" class="form-control" th:value="${param.octaneNumber}">
+            </div>
+            <div class="col-auto align-self-end">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="isOnSale" th:checked="${param.isOnSale == 'true'}">
+                    <label class="form-check-label">On Sale</label>
+                </div>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Таблица конфигураций -->
+    <table class="table table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Model ID</th>
+            <th>Vol</th>
+            <th>Power</th>
+            <th>Fuel</th>
+            <th>Doors</th>
+            <th>Seats</th>
+            <th>Trunk</th>
+            <th>Transm.</th>
+            <th>Cruise</th>
+            <th>Base Price</th>
+            <th>Discount</th>
+            <th>Octane</th>
+            <th>On Sale</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="vc : ${vehicleConfigs}">
+            <td th:text="${vc.id}"></td>
+            <td><input type="number" class="form-control" name="modelId" th:value="${vc.model.id}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" step="0.1" class="form-control" name="engineVolume" th:value="${vc.engineVolume}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" class="form-control" name="enginePower" th:value="${vc.enginePower}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" step="0.1" class="form-control" name="fuelConsumption" th:value="${vc.fuelConsumption}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" class="form-control" name="doorsCount" th:value="${vc.doorsCount}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" class="form-control" name="seatsCount" th:value="${vc.seatsCount}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" class="form-control" name="trunkCapacity" th:value="${vc.trunkCapacity}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="text" class="form-control" name="transmission" th:value="${vc.transmission}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="checkbox" class="form-check-input" name="hasCruiseControl" th:checked="${vc.hasCruiseControl}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" step="0.01" class="form-control" name="basePrice" th:value="${vc.basePrice}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" step="0.01" class="form-control" name="discountAmount" th:value="${vc.discountAmount}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="number" class="form-control" name="octaneNumber" th:value="${vc.octaneNumber}" th:form="'form-'+${vc.id}"></td>
+            <td><input type="checkbox" class="form-check-input" name="isOnSale" th:checked="${vc.isOnSale}" th:form="'form-'+${vc.id}"></td>
+            <td>
+                <form th:action="@{/manager/vehicle_configs/{id}/edit(id=${vc.id})}" method="post" th:id="'form-'+${vc.id}">
+                    <button type="submit" class="btn btn-success btn-sm">Save</button>
+                </form>
+                <a th:href="@{/manager/vehicle_configs/{id}/delete(id=${vc.id})}" class="btn btn-danger btn-sm mt-1">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="~{generic :: page-bottom}"></div>
+</body>
+</html>
