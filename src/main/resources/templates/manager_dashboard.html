@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель менеджера</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body class="bg-light">
+<div th:replace="~{generic :: page-header}"></div>
+
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Панель менеджера</h1>
+    <div class="row g-4">
+        <div class="col-md-4"><a th:href="@{/manager/order_list}" class="btn btn-primary w-100 py-3">Список заказов клиентов</a></div>
+        <div class="col-md-4"><a th:href="@{/manager/testdrive_list}" class="btn btn-primary w-100 py-3">Список заявок на тест-драйв</a></div>
+        <div class="col-md-4"><a th:href="@{/manager/car_list}" class="btn btn-primary w-100 py-3">Список автомобилей</a></div>
+        <div class="col-md-4"><a th:href="@{/manager/vehicle_config_list}" class="btn btn-primary w-100 py-3">Список базовых комплектаций</a></div>
+        <div class="col-md-4"><a th:href="@{/manager/model_list}" class="btn btn-primary w-100 py-3">Список моделей</a></div>
+        <div class="col-md-4"><a th:href="@{/manager/brand_list}" class="btn btn-primary w-100 py-3">Список марок</a></div>
+        <div class="col-md-4"><a th:href="@{/manager/manufacturer_list}" class="btn btn-primary w-100 py-3">Список производителей</a></div>
+        <div class="col-md-4"><a th:href="@{/manager/register}" class="btn btn-success w-100 py-3">Создать аккаунт менеджера</a></div>
+        <div class="col-md-4"><a th:href="@{/manager/client_list}" class="btn btn-primary w-100 py-3">Список клиентов</a></div>
+    </div>
+</div>
+
+<div th:replace="~{generic :: page-bottom}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -35,6 +35,11 @@ public class ManagerController {
     private final ModelDAO modelDAO;
     private final VehicleConfigurationDAO vehicleConfigDAO;
 
+    @GetMapping("/manager/dashboard")
+    public String showDashboard() {
+        return "manager_dashboard";
+    }
+
     @GetMapping("/manager/order_list")
     public String getOrders(
             @RequestParam(required = false) String managerId,
