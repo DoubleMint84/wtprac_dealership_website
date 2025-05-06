@@ -14,6 +14,7 @@ import ru.ispras.wtprac.dealership.DAO.ManagerDAO;
 import ru.ispras.wtprac.dealership.DAO.OrderDAO;
 import ru.ispras.wtprac.dealership.model.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -146,6 +147,79 @@ public class ManagerController {
     public String deleteOrder(@PathVariable Long id) {
         orderDAO.deleteById(id);
         return "redirect:/manager/order_list";
+    }
+
+    @GetMapping("/manager/car_list")
+    public String getCars(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String vin,
+        @RequestParam(required = false) String color,
+        @RequestParam(required = false) String status,
+        Model model) {
+
+        Collection<Car> cars = carDAO.getAll();
+
+        // Фильтрация
+        if (name != null && !name.isEmpty()) {
+            cars = cars.stream()
+                    .filter(car -> car.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("name", name);
+        }
+        if (vin != null && !vin.isEmpty()) {
+            cars = cars.stream()
+                    .filter(car -> car.getVin().equalsIgnoreCase(vin))
+                    .collect(Collectors.toList());
+            model.addAttribute("vin", vin);
+        }
+        if (color != null && !color.isEmpty()) {
+            cars = cars.stream()
+                    .filter(car -> car.getColor() != null && car.getColor().equalsIgnoreCase(color))
+                    .collect(Collectors.toList());
+            model.addAttribute("color", color);
+        }
+        if (status != null && !status.isEmpty()) {
+            cars = cars.stream()
+                    .filter(car -> car.getCarStatus().name().equalsIgnoreCase(status))
+                    .collect(Collectors.toList());
+            model.addAttribute("status", status);
+        }
+
+        model.addAttribute("cars", cars);
+        model.addAttribute("statuses", CarStatus.values());
+        return "car_list";
+    }
+
+    @PostMapping("/manager/cars/{id}/edit")
+    public String updateCar(
+            @PathVariable Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String vin,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) String seat,
+            @RequestParam(required = false) BigDecimal price,
+            @RequestParam CarStatus status) {
+
+        Car car = carDAO.getById(id);
+        if (car == null) {
+            throw new IllegalArgumentException("Invalid order Id:" + id);
+        }
+
+        car.setName(name);
+        car.setVin(vin);
+        car.setColor(color);
+        car.setSeat(seat);
+        car.setPrice(price);
+        car.setCarStatus(status);
+
+        carDAO.updateOne(car);
+        return "redirect:/manager/car_list";
+    }
+
+    @PostMapping("/manager/cars/{id}/delete")
+    public String deleteCar(@PathVariable Long id) {
+        carDAO.deleteById(id);
+        return "redirect:/manager/car_list";
     }
 
 }
