@@ -8,10 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.ispras.wtprac.dealership.DAO.CarDAO;
-import ru.ispras.wtprac.dealership.DAO.ClientDAO;
-import ru.ispras.wtprac.dealership.DAO.ManagerDAO;
-import ru.ispras.wtprac.dealership.DAO.OrderDAO;
+import ru.ispras.wtprac.dealership.DAO.*;
 import ru.ispras.wtprac.dealership.model.*;
 
 import java.math.BigDecimal;
@@ -32,6 +29,8 @@ public class ManagerController {
     private final ClientDAO clientDAO;
 
     private final ManagerDAO managerDAO;
+    private final BrandDAO brandDAO;
+    private final ManufacturerDAO manufacturerDAO;
 
     @GetMapping("/manager/order_list")
     public String getOrders(
@@ -143,7 +142,7 @@ public class ManagerController {
         return "redirect:/manager/order_list";
     }
 
-    @PostMapping("/manager/orders/{id}/delete")
+    @GetMapping("/manager/orders/{id}/delete")
     public String deleteOrder(@PathVariable Long id) {
         orderDAO.deleteById(id);
         return "redirect:/manager/order_list";
@@ -216,7 +215,7 @@ public class ManagerController {
         return "redirect:/manager/car_list";
     }
 
-    @PostMapping("/manager/cars/{id}/delete")
+    @GetMapping("/manager/cars/{id}/delete")
     public String deleteCar(@PathVariable Long id) {
         carDAO.deleteById(id);
         return "redirect:/manager/car_list";
@@ -303,10 +302,76 @@ public class ManagerController {
         return "redirect:/manager/client_list";
     }
 
-    @PostMapping("/manager/clients/{id}/delete")
+    @GetMapping("/manager/clients/{id}/delete")
     public String deleteClient(@PathVariable Long id) {
         clientDAO.deleteById(id);
         return "redirect:/manager/client_list";
+    }
+
+    @GetMapping("/manager/brand_list")
+    public String getBrands(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long manufacturerId,
+            @RequestParam(required = false) String country,
+            Model model) {
+
+        Collection<Brand> brands = brandDAO.getAll();
+
+        // Фильтрация
+        if (name != null && !name.isEmpty()) {
+            brands = brands.stream()
+                    .filter(x -> x.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("name", name);
+        }
+        if (manufacturerId != null) {
+            brands = brands.stream()
+                    .filter(x -> x.getManufacturer().getId().equals(manufacturerId))
+                    .collect(Collectors.toList());
+            model.addAttribute("manufacturerId", manufacturerId);
+        }
+        if (country != null && !country.isEmpty()) {
+            brands = brands.stream()
+                    .filter(x -> x.getCountry().toLowerCase().contains(country.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("country", country);
+        }
+
+        model.addAttribute("brands", brands);
+        return "brand_list";
+    }
+
+    @PostMapping("/manager/brands/{id}/edit")
+    public String updateBrand(
+            @PathVariable Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long manufacturerId,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String country) {
+
+        Brand brand = brandDAO.getById(id);
+        if (brand == null) {
+            throw new IllegalArgumentException("Invalid client Id:" + id);
+        }
+
+        brand.setName(name);
+
+        Manufacturer manufacturer = manufacturerDAO.getById(manufacturerId);
+        if (manufacturer == null) {
+            throw new IllegalArgumentException("Invalid manufacturer Id:" + id);
+        }
+        brand.setManufacturer(manufacturer);
+        brand.setDescription(description);
+        brand.setCountry(country);
+
+        brandDAO.updateOne(brand);
+        return "redirect:/manager/brand_list";
+    }
+
+    @GetMapping("/manager/brands/{id}/delete")
+    public String deleteBrand(@PathVariable Long id) {
+        brandDAO.deleteById(id);
+        return "redirect:/manager/brand_list";
     }
 
 }
