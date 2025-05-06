@@ -31,6 +31,7 @@ public class ManagerController {
     private final ManagerDAO managerDAO;
     private final BrandDAO brandDAO;
     private final ManufacturerDAO manufacturerDAO;
+    private final TestDriveScheduleDAO testDriveScheduleDAO;
 
     @GetMapping("/manager/order_list")
     public String getOrders(
@@ -415,6 +416,125 @@ public class ManagerController {
     public String deleteManufacturer(@PathVariable Long id) {
         manufacturerDAO.deleteById(id);
         return "redirect:/manager/manufacturer_list";
+    }
+
+    @GetMapping("/manager/testdrive_list")
+    public String getTestDrives(
+            @RequestParam(required = false) String carId,
+            @RequestParam(required = false) String testDriveStatus,
+            @RequestParam(required = false) String managerId,
+            @RequestParam(required = false) String clientId,
+            Model model) {
+
+        Collection<TestDriveSchedule> testDriveSchedules = testDriveScheduleDAO.getAll();
+
+        // Обработка managerId
+        Long managerIdLong = null;
+        if (managerId != null && !managerId.isEmpty()) {
+            try {
+                managerIdLong = Long.parseLong(managerId);
+            } catch (NumberFormatException e) {
+                // Обработка неверного формата
+            }
+        }
+
+        // Обработка carId
+        Long carIdLong = null;
+        if (carId != null && !carId.isEmpty()) {
+            try {
+                carIdLong = Long.parseLong(carId);
+            } catch (NumberFormatException e) {
+                // Обработка неверного формата
+            }
+        }
+
+        Long clientIdLong = null;
+        if (clientId != null && !clientId.isEmpty()) {
+            try {
+                clientIdLong = Long.parseLong(clientId);
+            } catch (NumberFormatException e) {
+                // Обработка неверного формата
+            }
+        }
+
+        // Фильтрация
+        if (managerIdLong != null) {
+            Long finalManagerIdLong = managerIdLong;
+            testDriveSchedules = testDriveSchedules.stream()
+                    .filter(x -> x.getManager() != null && Objects.equals(x.getManager().getId(), finalManagerIdLong))
+                    .collect(Collectors.toList());
+        }
+        if (carIdLong != null) {
+            Long finalCarIdLong = carIdLong;
+            testDriveSchedules = testDriveSchedules.stream()
+                    .filter(x -> Objects.equals(x.getCar().getId(), finalCarIdLong))
+                    .collect(Collectors.toList());
+        }
+        if (testDriveStatus != null && !testDriveStatus.isEmpty()) {
+            testDriveSchedules = testDriveSchedules.stream()
+                    .filter(x -> x.getTestDriveStatus().name().equals(testDriveStatus))
+                    .collect(Collectors.toList());
+            model.addAttribute("testDriveStatus", testDriveStatus);
+        }
+        if (clientIdLong != null) {
+            Long finalClientIdLong = clientIdLong;
+            testDriveSchedules = testDriveSchedules.stream()
+                    .filter(x -> Objects.equals(x.getClient().getId(), finalClientIdLong))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("testDrives", testDriveSchedules);
+        model.addAttribute("statuses", TestDriveStatus.values());
+        return "testdrive_list";
+    }
+
+    @PostMapping("/manager/testdrives/{id}/edit")
+    public String updateTestDrive(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long carId,
+            @RequestParam TestDriveStatus testDriveStatus,
+            @RequestParam Long managerId,
+            @RequestParam Long clientId) {
+
+        TestDriveSchedule testDriveSchedule = testDriveScheduleDAO.getById(id);
+        if (testDriveSchedule == null) {
+            throw new IllegalArgumentException("Invalid testDrive Id:" + id);
+        }
+
+        // Обновление менеджера
+        if (carId != null) {
+            Car car = carDAO.getById(carId);
+            if (car == null) {
+                throw new IllegalArgumentException("Invalid car Id:" + carId);
+            }
+            testDriveSchedule.setCar(car);
+        } else {
+            testDriveSchedule.setCar(null);
+        }
+
+        if (managerId != null) {
+            Manager manager = managerDAO.getById(managerId);
+            testDriveSchedule.setManager(manager);
+        } else {
+            testDriveSchedule.setManager(null);
+        }
+
+        if (clientId != null) {
+            Client client = clientDAO.getById(clientId);
+            testDriveSchedule.setClient(client);
+        } else {
+            testDriveSchedule.setClient(null);
+        }
+
+        testDriveSchedule.setTestDriveStatus(testDriveStatus);
+        testDriveScheduleDAO.updateOne(testDriveSchedule);
+        return "redirect:/manager/testdrive_list";
+    }
+
+    @GetMapping("/manager/testdrives/{id}/delete")
+    public String deleteTestDrive(@PathVariable Long id) {
+        testDriveScheduleDAO.deleteById(id);
+        return "redirect:/manager/testdrive_list";
     }
 
 }
