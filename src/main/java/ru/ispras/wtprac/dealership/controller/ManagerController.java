@@ -374,4 +374,47 @@ public class ManagerController {
         return "redirect:/manager/brand_list";
     }
 
+    @GetMapping("/manager/manufacturer_list")
+    public String getManufacturers(
+            @RequestParam(required = false) String name,
+            Model model) {
+
+        Collection<Manufacturer> manufacturers = manufacturerDAO.getAll();
+
+        // Фильтрация
+        if (name != null && !name.isEmpty()) {
+            manufacturers = manufacturers.stream()
+                    .filter(x -> x.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("name", name);
+        }
+
+        model.addAttribute("manufacturers", manufacturers);
+        return "manufacturer_list";
+    }
+
+    @PostMapping("/manager/manufacturers/{id}/edit")
+    public String updateManufacturer(
+            @PathVariable Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description) {
+
+        Manufacturer manufacturer = manufacturerDAO.getById(id);
+        if (manufacturer == null) {
+            throw new IllegalArgumentException("Invalid client Id:" + id);
+        }
+
+        manufacturer.setName(name);
+        manufacturer.setDescription(description);
+
+        manufacturerDAO.updateOne(manufacturer);
+        return "redirect:/manager/manufacturer_list";
+    }
+
+    @GetMapping("/manager/manufacturers/{id}/delete")
+    public String deleteManufacturer(@PathVariable Long id) {
+        manufacturerDAO.deleteById(id);
+        return "redirect:/manager/manufacturer_list";
+    }
+
 }

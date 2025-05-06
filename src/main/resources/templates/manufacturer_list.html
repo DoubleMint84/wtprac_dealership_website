@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/style.css}">
-    <title>Список марок</title>
+    <title>Список производителей</title>
 </head>
 <script>
     document.getElementById('filterForm').addEventListener('submit', function(e) {
@@ -28,22 +28,14 @@
 <body>
 <div th:replace="~{generic :: page-header}"></div>
 <div class="container mt-4">
-
+    <a href="/login_registration" class="btn btn-primary mb-3">Add New Client</a>
 
     <!-- Форма фильтрации -->
-    <form th:action="@{/manager/brand_list}" method="get" class="mb-4">
+    <form th:action="@{/manager/manufacturer_list}" method="get" class="mb-4">
         <div class="row g-3 align-items-end">
             <div class="col-auto">
                 <label class="form-label">Name</label>
                 <input type="text" name="name" class="form-control" th:value="${param.name}">
-            </div>
-            <div class="col-auto">
-                <label class="form-label">Manufacturer ID</label>
-                <input type="number" name="manufacturerId" class="form-control" th:value="${param.manufacturerId}">
-            </div>
-            <div class="col-auto">
-                <label class="form-label">Country</label>
-                <input type="text" name="country" class="form-control" th:value="${param.country}">
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-secondary">Filter</button>
@@ -56,46 +48,32 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Manufacturer ID</th>
             <th>Description</th>
-            <th>Country</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="brand : ${brands}">
-            <td th:text="${brand.getId()}"></td>
+        <tr th:each="manufacturer : ${manufacturers}">
+            <td th:text="${manufacturer.getId()}"></td>
             <td>
                 <input type="text" class="form-control"
                        name="name"
-                       th:value="${brand.getName()}"
-                       th:form="'form-'+${brand.getId()}">
-            </td>
-            <td>
-                <input type="number" class="form-control"
-                       name="manufacturerId"
-                       th:value="${brand.getManufacturer()?.getId()}"
-                       th:form="'form-'+${brand.getId()}">
+                       th:value="${manufacturer.getName()}"
+                       th:form="'form-'+${manufacturer.getId()}">
             </td>
             <td>
                 <input type="text" class="form-control"
                        name="description"
-                       th:value="${brand.getDescription()}"
-                       th:form="'form-'+${brand.getId()}">
+                       th:value="${manufacturer.getDescription()}"
+                       th:form="'form-'+${manufacturer.getId()}">
             </td>
             <td>
-                <input type="text" class="form-control"
-                       name="country"
-                       th:value="${brand.getCountry()}"
-                       th:form="'form-'+${brand.getId()}">
-            </td>
-            <td>
-                <form th:action="@{/manager/brands/{id}/edit(id=${brand.getId()})}"
+                <form th:action="@{/manager/manufacturers/{id}/edit(id=${manufacturer.getId()})}"
                       method="post"
-                      th:id="'form-'+${brand.getId()}">
+                      th:id="'form-'+${manufacturer.getId()}">
                     <button type="submit" class="btn btn-success btn-sm">Save</button>
                 </form>
-                <a th:href="@{/manager/brands/{id}/delete(id=${brand.getId()})}"
+                <a th:href="@{/manager/manufacturers/{id}/delete(id=${manufacturer.getId()})}"
                    class="btn btn-danger btn-sm mt-1">Delete</a>
             </td>
         </tr>
