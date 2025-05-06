@@ -222,4 +222,91 @@ public class ManagerController {
         return "redirect:/manager/car_list";
     }
 
+    @GetMapping("/manager/client_list")
+    public String getClients(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String passport,
+            @RequestParam(required = false) String drivingLicense,
+            Model model) {
+
+        Collection<Client> clients = clientDAO.getAll();
+
+        // Фильтрация
+        if (name != null && !name.isEmpty()) {
+            clients = clients.stream()
+                    .filter(x -> x.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("name", name);
+        }
+        if (email != null && !email.isEmpty()) {
+            clients = clients.stream()
+                    .filter(x -> x.getEmail().toLowerCase().contains(email.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("email", email);
+        }
+
+        if (address != null && !address.isEmpty()) {
+            clients = clients.stream()
+                    .filter(x -> x.getEmail().toLowerCase().contains(address.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("address", address);
+        }
+        if (phone != null && !phone.isEmpty()) {
+            clients = clients.stream()
+                    .filter(x -> x.getEmail().toLowerCase().contains(phone.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("phone", phone);
+        }
+        if (passport != null && !passport.isEmpty()) {
+            clients = clients.stream()
+                    .filter(x -> x.getEmail().toLowerCase().contains(passport.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("passport", passport);
+        }
+        if (drivingLicense != null && !drivingLicense.isEmpty()) {
+            clients = clients.stream()
+                    .filter(x -> x.getEmail().toLowerCase().contains(drivingLicense.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("drivingLicense", drivingLicense);
+        }
+
+        model.addAttribute("clients", clients);
+        return "client_list";
+    }
+
+    @PostMapping("/manager/clients/{id}/edit")
+    public String updateClient(
+            @PathVariable Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String passport,
+            @RequestParam(required = false) String drivingLicense) {
+
+        Client client = clientDAO.getById(id);
+        if (client == null) {
+            throw new IllegalArgumentException("Invalid client Id:" + id);
+        }
+
+        client.setName(name);
+        client.setEmail(email);
+        client.setAddress(address);
+        client.setPhone(phone);
+        client.setPassport(passport);
+        client.setDrivingLicense(drivingLicense);
+
+        clientDAO.updateOne(client);
+        return "redirect:/manager/client_list";
+    }
+
+    @PostMapping("/manager/clients/{id}/delete")
+    public String deleteClient(@PathVariable Long id) {
+        clientDAO.deleteById(id);
+        return "redirect:/manager/client_list";
+    }
+
 }
