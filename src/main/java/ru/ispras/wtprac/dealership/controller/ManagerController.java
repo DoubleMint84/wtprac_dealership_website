@@ -32,6 +32,7 @@ public class ManagerController {
     private final BrandDAO brandDAO;
     private final ManufacturerDAO manufacturerDAO;
     private final TestDriveScheduleDAO testDriveScheduleDAO;
+    private final ModelDAO modelDAO;
 
     @GetMapping("/manager/order_list")
     public String getOrders(
@@ -373,6 +374,70 @@ public class ManagerController {
     public String deleteBrand(@PathVariable Long id) {
         brandDAO.deleteById(id);
         return "redirect:/manager/brand_list";
+    }
+
+    @GetMapping("/manager/model_list")
+    public String getModels(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long brandId,
+            @RequestParam(required = false) Integer year,
+            Model model) {
+
+        Collection<ru.ispras.wtprac.dealership.model.Model> models = modelDAO.getAll();
+
+        // Фильтрация
+        if (name != null && !name.isEmpty()) {
+            models = models.stream()
+                    .filter(x -> x.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+            model.addAttribute("name", name);
+        }
+        if (brandId != null) {
+            models = models.stream()
+                    .filter(x -> x.getBrand().getId().equals(brandId))
+                    .collect(Collectors.toList());
+            model.addAttribute("brandId", brandId);
+        }
+        if (year != null) {
+            models = models.stream()
+                    .filter(x -> x.getYear().equals(year))
+                    .collect(Collectors.toList());
+            model.addAttribute("year", year);
+        }
+
+        model.addAttribute("models", models);
+        return "model_list";
+    }
+
+    @PostMapping("/manager/models/{id}/edit")
+    public String updateModel(
+            @PathVariable Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long brandId,
+            @RequestParam(required = false) Integer year) {
+
+        ru.ispras.wtprac.dealership.model.Model model = modelDAO.getById(id);
+        if (model == null) {
+            throw new IllegalArgumentException("Invalid model Id:" + id);
+        }
+
+        model.setName(name);
+
+        Brand brand = brandDAO.getById(brandId);
+        if (brand == null) {
+            throw new IllegalArgumentException("Invalid brand Id:" + id);
+        }
+        model.setBrand(brand);
+        model.setYear(year);
+
+        modelDAO.updateOne(model);
+        return "redirect:/manager/model_list";
+    }
+
+    @GetMapping("/manager/models/{id}/delete")
+    public String deleteModel(@PathVariable Long id) {
+        modelDAO.deleteById(id);
+        return "redirect:/manager/model_list";
     }
 
     @GetMapping("/manager/manufacturer_list")
