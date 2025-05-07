@@ -44,7 +44,7 @@
             <a class="nav-link" href="catalog">Каталог</a>
           </li>
           <li class="nav-item" sec:authorize="isAnonymous()">
-            <a class="nav-link" href="login_registration">Вход и регистрация</a>
+            <a id="headerLoginRegister" class="nav-link" href="login_registration">Вход и регистрация</a>
           </li>
           <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
             <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown"

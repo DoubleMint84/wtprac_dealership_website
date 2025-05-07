@@ -15,7 +15,7 @@
 <div th:replace="~{generic :: page-header}"></div>
 
 <div class="container py-5">
-    <h1 class="mb-4">Личный кабинет <span sec:authentication="name"></span></h1>
+    <h1 class="mb-4">Личный кабинет <span id="headerName" sec:authentication="name"></span></h1>
 
     <!-- Форма личных данных -->
     <div class="row g-4">
