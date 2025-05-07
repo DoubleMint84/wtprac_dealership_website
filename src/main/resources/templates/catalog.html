@@ -18,7 +18,7 @@
     <th:block th:each="car : ${cars}">
         <th:block th:if="${car.getCarStatus().isAvailable()}">
             <div class="item-card">
-                <a class="item-text" th:href="'car/' + ${car.getId()}">
+                <a class="item-text" th:href="'car/' + ${car.getId()}" th:id="'car' + ${car.getId()}">
                     <img class="card-img" th:src="'/images/car/car' + ${car.getId()} + '.png'" th:alt="${car.getName()}"/>
                     <div class="card-content">
                         <h3 class="name" th:text="${car.getName()}"></h3>
