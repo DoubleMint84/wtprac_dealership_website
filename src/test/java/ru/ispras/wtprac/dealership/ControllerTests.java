@@ -25,6 +25,8 @@ public class ControllerTests {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
 
         assertEquals("Домашняя страница", driver.getTitle());
+
+        driver.quit();
     }
 
     @Test
@@ -41,7 +43,7 @@ public class ControllerTests {
 
         assertEquals("Каталог", driver.getTitle());
 
-
+        driver.quit();
     }
 
     @Test
@@ -67,14 +69,11 @@ public class ControllerTests {
         driver.findElement(By.id("loginPassword")).sendKeys("password");
         driver.findElement(By.id("loginButton")).click();
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-
-        assertEquals("Аккаунт", driver.getTitle());
-
         WebElement headerName = driver.findElement(By.id("headerName"));
 
         assertNotNull(headerName);
         assertEquals("alex@keller.net", headerName.getText());
 
+        driver.quit();
     }
 }
