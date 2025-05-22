@@ -113,7 +113,8 @@ public class ControllerTests {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.id("car1")));
         assertNotNull(element);
-        driver.executeScript("arguments[0].scrollIntoView(true);", element);
+        Thread.sleep(1000);
+        driver.executeScript("arguments[0].scrollIntoView({behavior: \"instant\", block: \"start\", inline: \"nearest\"});", element);
         element.click();
 
         WebElement itemHeader = driver.findElement(By.className("main-header"));
